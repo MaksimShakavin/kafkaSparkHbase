@@ -1,0 +1,16 @@
+spark:
+  appName: SparkStreamingLogAggregationApp
+  duration: 2000
+kafkaConnection:
+  group: test
+  topics:
+    logs-topic: 1
+  zookeeper: sandbox.hortonworks.com:2181
+hbase:
+  tableName: log_lines
+  columnFamily: data
+  zookeeperClientPort: 2181
+  zookeeperQuorum: sandbox.hortonworks.com
+  zookeeperParent: /hbase-unsecure
+
+
