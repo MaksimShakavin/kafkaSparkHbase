@@ -1,7 +1,9 @@
 package com.epam.bigdata2016.minskq3.model;
 
 
-public class CityInfo {
+import java.io.Serializable;
+
+public class CityInfo implements Serializable{
     private float latitude;
     private float longitude;
 

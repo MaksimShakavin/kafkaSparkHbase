@@ -4,10 +4,11 @@ package com.epam.bigdata2016.minskq3.model;
 import eu.bitwalker.useragentutils.UserAgent;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class ESModel {
+public class ESModel implements Serializable{
     private String bidId;
     private String timestamp;
     private String iPinyouId;
@@ -18,7 +19,7 @@ public class ESModel {
     private String uaFamily;
 
     //geoPoint
-    private CityInfo cityInfo;
+    private CityInfo geoPoint;
 
     private String ip;
     private int region;
@@ -35,7 +36,7 @@ public class ESModel {
     private int payingPrice;
     private String creativeId;
     private int biddingPrice;
-    private String addvertiseId;
+    private String advertiserId;
     private String userTags;
     private int streamId;
 
@@ -79,7 +80,7 @@ public class ESModel {
             esModel.payingPrice = Integer.parseInt(arr[16]);
             esModel.creativeId = arr[17];
             esModel.biddingPrice = Integer.parseInt(arr[18]);
-            esModel.addvertiseId = arr[19];
+            esModel.advertiserId = arr[19];
             esModel.userTags = arr[20];
             esModel.streamId = Integer.parseInt(arr[21]);
             return esModel;
@@ -138,12 +139,12 @@ public class ESModel {
         this.uaFamily = uaFamily;
     }
 
-    public CityInfo getCityInfo() {
-        return cityInfo;
+    public CityInfo getGeoPoint() {
+        return geoPoint;
     }
 
-    public void setCityInfo(CityInfo cityInfo) {
-        this.cityInfo = cityInfo;
+    public void setGeoPoint(CityInfo geoPoint) {
+        this.geoPoint = geoPoint;
     }
 
     public String getIp() {
@@ -266,12 +267,12 @@ public class ESModel {
         this.biddingPrice = biddingPrice;
     }
 
-    public String getAddvertiseId() {
-        return addvertiseId;
+    public String getAdvertiserId() {
+        return advertiserId;
     }
 
-    public void setAddvertiseId(String addvertiseId) {
-        this.addvertiseId = addvertiseId;
+    public void setAdvertiserId(String advertiserId) {
+        this.advertiserId = advertiserId;
     }
 
     public String getUserTags() {

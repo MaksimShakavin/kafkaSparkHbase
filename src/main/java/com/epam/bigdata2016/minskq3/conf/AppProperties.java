@@ -12,17 +12,21 @@ public class AppProperties implements Serializable{
     private KafkaConnection kafkaConnection = new KafkaConnection();
     private Spark spark = new Spark();
     private Hbase hbase = new Hbase();
+    private Hadoop hadoop = new Hadoop();
+    private ElasticSearch elasticSearch = new ElasticSearch();
 
     public KafkaConnection getKafkaConnection() {
         return kafkaConnection;
     }
 
-    public Spark getSpark() {
-        return spark;
-    }
+    public Spark getSpark() { return spark; }
 
-    public Hbase getHbase() {
-        return hbase;
+    public Hbase getHbase() { return hbase; }
+
+    public Hadoop getHadoop() { return hadoop; }
+
+    public ElasticSearch getElasticSearch() {
+        return elasticSearch;
     }
 
     public static class KafkaConnection implements Serializable{
@@ -148,6 +152,48 @@ public class AppProperties implements Serializable{
                     ", zookeeperQuorum='" + zookeeperQuorum + '\'' +
                     ", zookeeperParent='" + zookeeperParent + '\'' +
                     '}';
+        }
+    }
+
+    public static class Hadoop implements Serializable{
+        private String fileSystem;
+        private String cityDictionary;
+
+        public String getFileSystem() {
+            return fileSystem;
+        }
+
+        public void setFileSystem(String fileSystem) {
+            this.fileSystem = fileSystem;
+        }
+
+        public String getCityDictionary() {
+            return cityDictionary;
+        }
+
+        public void setCityDictionary(String cityDictionary) {
+            this.cityDictionary = cityDictionary;
+        }
+    }
+
+    public static class ElasticSearch implements  Serializable{
+        private String index;
+        private String type;
+
+        public String getIndex() {
+            return index;
+        }
+
+        public void setIndex(String index) {
+            this.index = index;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
         }
     }
 

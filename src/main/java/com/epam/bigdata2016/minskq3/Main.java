@@ -30,29 +30,34 @@ public class Main {
         ConfigurableApplicationContext ctx = new SpringApplicationBuilder(Main.class).run(args);
         AppProperties props = ctx.getBean(AppProperties.class);
         JavaStreamingContext jsc = ctx.getBean(JavaStreamingContext.class);
-
-        Broadcast<Map<String, CityInfo>> brCitiesDict = jsc.sparkContext().broadcast(DictionaryUtils.citiesDictionry());
+        Map<String, CityInfo> dict = DictionaryUtils.citiesDictionry(props.getHadoop());
+        Broadcast<Map<String, CityInfo>> brCitiesDict = jsc.sparkContext().broadcast(dict);
 
         JavaPairReceiverInputDStream<String, String> logs =
-                KafkaProcessor.getStream(jsc, props.getKafkaConnection());
+            KafkaProcessor.getStream(jsc, props.getKafkaConnection());
 
         //save to HBASE
-        JavaDStream<LogLine> logLineStream = logs.map(keyValue -> LogLine.parseLogLine(keyValue._2()));
-        logLineStream
-                .foreachRDD(rdd ->
-                        rdd.map(line -> LogLine.convertToPut(line, props.getHbase().getColumnFamily()))
-                                .foreachPartition(iter -> HbaseProcessor.saveToTable(iter, props.getHbase()))
-                );
+//        JavaDStream<LogLine> logLineStream = logs.map(keyValue -> LogLine.parseLogLine(keyValue._2()));
+//        logLineStream
+//            .foreachRDD(rdd ->
+//                rdd.map(line -> LogLine.convertToPut(line, props.getHbase().getColumnFamily()))
+//                    .foreachPartition(iter -> HbaseProcessor.saveToTable(iter, props.getHbase()))
+//            );
         //save to ELASTIC SEARCH
+        String index = props.getElasticSearch().getIndex();
+        String type = props.getElasticSearch().getType();
+        String confStr = index+ "/" +type;
         logs
-                .map(keyValue -> {
-                    ESModel model = ESModel.parseLine(keyValue._2());
-                    CityInfo cityInfo = brCitiesDict.value().get(Integer.toString(model.getCity()));
-                    model.setCityInfo(cityInfo);
-                    return ESModel.parseLine(keyValue._2());
-                })
-                .map(ESModel::toStringifyJson)
-                .foreachRDD(jsonRdd -> JavaEsSpark.saveJsonToEs(jsonRdd, args[5] + "/" + args[6]/*"logsindext3/logs"*/));
+            .map(keyValue -> {
+                ESModel model = ESModel.parseLine(keyValue._2());
+                CityInfo cityInfo = brCitiesDict.value().get(Integer.toString(model.getCity()));
+                model.setGeoPoint(cityInfo);
+                return ESModel.parseLine(keyValue._2());
+            })
+            .map(ESModel::toStringifyJson)
+            .foreachRDD(jsonRdd -> JavaEsSpark.saveJsonToEs(jsonRdd, confStr));
+
+
         jsc.start();
         jsc.awaitTermination();
     }

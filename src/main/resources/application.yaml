@@ -12,5 +12,11 @@ hbase:
   zookeeperClientPort: 2181
   zookeeperQuorum: sandbox.hortonworks.com
   zookeeperParent: /hbase-unsecure
+hadoop:
+  fileSystem: hdfs://sandbox.hortonworks.com:8020/
+  cityDictionary: hdfs://sandbox.hortonworks.com:8020/tmp/dictionaries/cities.txt
+elasticSearch:
+  index: logs03
+  type: logs
 
 
