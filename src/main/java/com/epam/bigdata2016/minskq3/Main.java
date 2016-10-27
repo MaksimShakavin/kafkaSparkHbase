@@ -37,20 +37,21 @@ public class Main {
             KafkaProcessor.getStream(jsc, props.getKafkaConnection());
 
         //save to HBASE
-//        JavaDStream<LogLine> logLineStream = logs.map(keyValue -> LogLine.parseLogLine(keyValue._2()));
-//        logLineStream
-//            .foreachRDD(rdd ->
-//                rdd.map(line -> LogLine.convertToPut(line, props.getHbase().getColumnFamily()))
-//                    .foreachPartition(iter -> HbaseProcessor.saveToTable(iter, props.getHbase()))
-//            );
+        JavaDStream<LogLine> logLineStream = logs.map(keyValue -> LogLine.parseLogLine(keyValue._2()));
+        logLineStream
+            .foreachRDD(rdd ->
+                rdd.map(line -> LogLine.convertToPut(line, props.getHbase().getColumnFamily()))
+                    .foreachPartition(iter -> HbaseProcessor.saveToTable(iter, props.getHbase()))
+            );
         //save to ELASTIC SEARCH
         String index = props.getElasticSearch().getIndex();
         String type = props.getElasticSearch().getType();
         String confStr = index+ "/" +type;
+        CityInfo unknown = new CityInfo(0,0);
         logs
             .map(keyValue -> {
                 ESModel model = ESModel.parseLine(keyValue._2());
-                CityInfo cityInfo = brCitiesDict.value().get(Integer.toString(model.getCity()));
+                CityInfo cityInfo = brCitiesDict.value().getOrDefault(Integer.toString(model.getCity()),unknown);
                 model.setGeoPoint(cityInfo);
                 return model;
             })
