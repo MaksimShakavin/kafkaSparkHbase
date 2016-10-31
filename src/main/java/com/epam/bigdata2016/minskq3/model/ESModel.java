@@ -20,6 +20,8 @@ public class ESModel implements Serializable{
 
     //geoPoint
     private CityInfo geoPoint;
+    //New, Current Repeat, High Repeat
+    private String category;
 
     private String ip;
     private int region;
@@ -146,6 +148,14 @@ public class ESModel implements Serializable{
 
     public void setGeoPoint(CityInfo geoPoint) {
         this.geoPoint = geoPoint;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public String getIp() {

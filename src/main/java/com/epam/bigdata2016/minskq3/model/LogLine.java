@@ -116,4 +116,270 @@ public class LogLine implements Serializable{
                 ", streamId=" + streamId +
                 '}';
     }
+
+    // GETTERS AND SETTERS
+
+    public String getBidId() {
+        return bidId;
+    }
+
+    public void setBidId(String bidId) {
+        this.bidId = bidId;
+    }
+
+    public static byte[] getBidIdBytes() {
+        return bidIdBytes;
+    }
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public static byte[] getTimestampBytes() {
+        return timestampBytes;
+    }
+
+    public String getiPinyouId() {
+        return iPinyouId;
+    }
+
+    public void setiPinyouId(String iPinyouId) {
+        this.iPinyouId = iPinyouId;
+    }
+
+    public static byte[] getiPinyouIdBytes() {
+        return iPinyouIdBytes;
+    }
+
+    public String getUserAgent() {
+        return userAgent;
+    }
+
+    public void setUserAgent(String userAgent) {
+        this.userAgent = userAgent;
+    }
+
+    public static byte[] getUserAgentBytes() {
+        return userAgentBytes;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    public static byte[] getIpBytes() {
+        return ipBytes;
+    }
+
+    public int getRegion() {
+        return region;
+    }
+
+    public void setRegion(int region) {
+        this.region = region;
+    }
+
+    public static byte[] getRegionBytes() {
+        return regionBytes;
+    }
+
+    public int getCity() {
+        return city;
+    }
+
+    public void setCity(int city) {
+        this.city = city;
+    }
+
+    public static byte[] getCityBytes() {
+        return cityBytes;
+    }
+
+    public int getAddExchange() {
+        return addExchange;
+    }
+
+    public void setAddExchange(int addExchange) {
+        this.addExchange = addExchange;
+    }
+
+    public static byte[] getAddExchangeBytes() {
+        return addExchangeBytes;
+    }
+
+    public String getDomain() {
+        return domain;
+    }
+
+    public void setDomain(String domain) {
+        this.domain = domain;
+    }
+
+    public static byte[] getDomainBytes() {
+        return domainBytes;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public static byte[] getUrlBytes() {
+        return urlBytes;
+    }
+
+    public String getAnonUrl() {
+        return anonUrl;
+    }
+
+    public void setAnonUrl(String anonUrl) {
+        this.anonUrl = anonUrl;
+    }
+
+    public static byte[] getAnonUrlBytes() {
+        return anonUrlBytes;
+    }
+
+    public String getAddSlot() {
+        return addSlot;
+    }
+
+    public void setAddSlot(String addSlot) {
+        this.addSlot = addSlot;
+    }
+
+    public static byte[] getAddSlotBytes() {
+        return addSlotBytes;
+    }
+
+    public int getAddSlotWidth() {
+        return addSlotWidth;
+    }
+
+    public void setAddSlotWidth(int addSlotWidth) {
+        this.addSlotWidth = addSlotWidth;
+    }
+
+    public static byte[] getAddSlotWidthBytes() {
+        return addSlotWidthBytes;
+    }
+
+    public int getAddSlotHeight() {
+        return addSlotHeight;
+    }
+
+    public void setAddSlotHeight(int addSlotHeight) {
+        this.addSlotHeight = addSlotHeight;
+    }
+
+    public static byte[] getAddSlotHeightBytes() {
+        return addSlotHeightBytes;
+    }
+
+    public int getAddSlotVisability() {
+        return addSlotVisability;
+    }
+
+    public void setAddSlotVisability(int addSlotVisability) {
+        this.addSlotVisability = addSlotVisability;
+    }
+
+    public static byte[] getAddSlotVisabilityBytes() {
+        return addSlotVisabilityBytes;
+    }
+
+    public int getAddSlotFormat() {
+        return addSlotFormat;
+    }
+
+    public void setAddSlotFormat(int addSlotFormat) {
+        this.addSlotFormat = addSlotFormat;
+    }
+
+    public static byte[] getAddSlotFormatBytes() {
+        return addSlotFormatBytes;
+    }
+
+    public int getPayingPrice() {
+        return payingPrice;
+    }
+
+    public void setPayingPrice(int payingPrice) {
+        this.payingPrice = payingPrice;
+    }
+
+    public static byte[] getPayingPriceBytes() {
+        return payingPriceBytes;
+    }
+
+    public String getCreativeId() {
+        return creativeId;
+    }
+
+    public void setCreativeId(String creativeId) {
+        this.creativeId = creativeId;
+    }
+
+    public static byte[] getCreativeIdBytes() {
+        return creativeIdBytes;
+    }
+
+    public int getBiddingPrice() {
+        return biddingPrice;
+    }
+
+    public void setBiddingPrice(int biddingPrice) {
+        this.biddingPrice = biddingPrice;
+    }
+
+    public static byte[] getBiddingPriceBytes() {
+        return biddingPriceBytes;
+    }
+
+    public String getAddvertiseId() {
+        return addvertiseId;
+    }
+
+    public void setAddvertiseId(String addvertiseId) {
+        this.addvertiseId = addvertiseId;
+    }
+
+    public static byte[] getAddvertiseIdBytes() {
+        return addvertiseIdBytes;
+    }
+
+    public String getUserTags() {
+        return userTags;
+    }
+
+    public void setUserTags(String userTags) {
+        this.userTags = userTags;
+    }
+
+    public static byte[] getUserTagsBytes() {
+        return userTagsBytes;
+    }
+
+    public int getStreamId() {
+        return streamId;
+    }
+
+    public void setStreamId(int streamId) {
+        this.streamId = streamId;
+    }
+
+    public static byte[] getStreamIdBytes() {
+        return streamIdBytes;
+    }
 }

@@ -33,16 +33,19 @@ public class Main {
         Map<String, CityInfo> dict = DictionaryUtils.citiesDictionry(props.getHadoop());
         Broadcast<Map<String, CityInfo>> brCitiesDict = jsc.sparkContext().broadcast(dict);
 
+
         JavaPairReceiverInputDStream<String, String> logs =
             KafkaProcessor.getStream(jsc, props.getKafkaConnection());
 
         //save to HBASE
-        JavaDStream<LogLine> logLineStream = logs.map(keyValue -> LogLine.parseLogLine(keyValue._2()));
-        logLineStream
-            .foreachRDD(rdd ->
-                rdd.map(line -> LogLine.convertToPut(line, props.getHbase().getColumnFamily()))
-                    .foreachPartition(iter -> HbaseProcessor.saveToTable(iter, props.getHbase()))
-            );
+//        JavaDStream<LogLine> logLineStream = logs.map(keyValue -> LogLine.parseLogLine(keyValue._2()))
+//            .filter(line -> !"null".equals(line.getiPinyouId()));
+//        logLineStream
+//            .foreachRDD(rdd ->
+//                rdd.map(line -> LogLine.convertToPut(line, props.getHbase().getColumnFamily()))
+//                    .foreachPartition(iter -> HbaseProcessor.saveToTable(iter, props.getHbase()))
+//            );
+
         //save to ELASTIC SEARCH
         String index = props.getElasticSearch().getIndex();
         String type = props.getElasticSearch().getType();
@@ -55,6 +58,8 @@ public class Main {
                 model.setGeoPoint(cityInfo);
                 return model;
             })
+            .filter(line -> !"null".equals(line.getiPinyouId()))
+            .mapPartitions(HbaseProcessor::getUserCategory)
             .map(ESModel::toStringifyJson)
             .foreachRDD(jsonRdd -> {
                 JavaEsSpark.saveJsonToEs(jsonRdd, confStr);
