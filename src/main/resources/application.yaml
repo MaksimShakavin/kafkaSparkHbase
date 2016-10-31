@@ -7,8 +7,8 @@ kafkaConnection:
     logs-topic: 1
   zookeeper: sandbox.hortonworks.com:2181
 hbase:
-  tableName: log_lines
-  columnFamily: data
+  tableName: LOG_TABLEF3
+  columnFamily: DATA
   zookeeperClientPort: 2181
   zookeeperQuorum: sandbox.hortonworks.com
   zookeeperParent: /hbase-unsecure

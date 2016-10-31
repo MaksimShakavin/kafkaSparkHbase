@@ -7,32 +7,32 @@ import org.apache.hadoop.hbase.util.Bytes;
 import java.io.Serializable;
 
 public class LogLine implements Serializable{
-    private String bidId;           private static final byte[] bidIdBytes = Bytes.toBytes("bidId");
-    private String timestamp;       private static final byte[] timestampBytes = Bytes.toBytes("timestamp");
-    private String iPinyouId;       private static final byte[] iPinyouIdBytes = Bytes.toBytes("iPinyouId");
-    private String userAgent;       private static final byte[] userAgentBytes = Bytes.toBytes("userAgent");
-    private String ip;              private static final byte[] ipBytes = Bytes.toBytes("ip");
-    private int region;             private static final byte[] regionBytes = Bytes.toBytes("region");
-    private int city;               private static final byte[] cityBytes = Bytes.toBytes("city");
-    private int addExchange;        private static final byte[] addExchangeBytes = Bytes.toBytes("addExchange");
-    private String domain;          private static final byte[] domainBytes = Bytes.toBytes("domain");
-    private String url;             private static final byte[] urlBytes = Bytes.toBytes("url");
-    private String anonUrl;         private static final byte[] anonUrlBytes = Bytes.toBytes("anonUrl");
-    private String addSlot;         private static final byte[] addSlotBytes = Bytes.toBytes("addSlot");
-    private int addSlotWidth;       private static final byte[] addSlotWidthBytes = Bytes.toBytes("addSlotWidth");
-    private int addSlotHeight;      private static final byte[] addSlotHeightBytes = Bytes.toBytes("addSlotHeight");
-    private int addSlotVisability;  private static final byte[] addSlotVisabilityBytes = Bytes.toBytes("addSlotVisability");
-    private int addSlotFormat;      private static final byte[] addSlotFormatBytes = Bytes.toBytes("addSlotFormat");
-    private int payingPrice;        private static final byte[] payingPriceBytes = Bytes.toBytes("payingPrice");
-    private String creativeId;      private static final byte[] creativeIdBytes = Bytes.toBytes("creativeId");
-    private int biddingPrice;       private static final byte[] biddingPriceBytes = Bytes.toBytes("biddingPrice");
-    private String addvertiseId;    private static final byte[] addvertiseIdBytes = Bytes.toBytes("addvertiseId");
-    private String userTags;        private static final byte[] userTagsBytes = Bytes.toBytes("userTags");
-    private int streamId;           private static final byte[] streamIdBytes = Bytes.toBytes("streamId");
+    private String bidId;           private static final byte[] bidIdBytes = Bytes.toBytes("BID_ID");
+    private String timestamp;       private static final byte[] timestampBytes = Bytes.toBytes("TIMESTAMP_DATE");
+    private String iPinyouId;       private static final byte[] iPinyouIdBytes = Bytes.toBytes("IPINYOU_ID");
+    private String userAgent;       private static final byte[] userAgentBytes = Bytes.toBytes("USER_AGENT");
+    private String ip;              private static final byte[] ipBytes = Bytes.toBytes("IP");
+    private int region;             private static final byte[] regionBytes = Bytes.toBytes("REGION");
+    private int city;               private static final byte[] cityBytes = Bytes.toBytes("CITY");
+    private int addExchange;        private static final byte[] addExchangeBytes = Bytes.toBytes("AD_EXCHANGE");
+    private String domain;          private static final byte[] domainBytes = Bytes.toBytes("DOMAIN");
+    private String url;             private static final byte[] urlBytes = Bytes.toBytes("URL");
+    private String anonUrl;         private static final byte[] anonUrlBytes = Bytes.toBytes("ANONYMOUS_URL_ID");
+    private String addSlot;         private static final byte[] addSlotBytes = Bytes.toBytes("AD_SLOT_ID");
+    private int addSlotWidth;       private static final byte[] addSlotWidthBytes = Bytes.toBytes("AD_SLOT_WIDTH");
+    private int addSlotHeight;      private static final byte[] addSlotHeightBytes = Bytes.toBytes("AD_SLOT_HEIGHT");
+    private int addSlotVisability;  private static final byte[] addSlotVisabilityBytes = Bytes.toBytes("AD_SLOT_VISIBILITY");
+    private int addSlotFormat;      private static final byte[] addSlotFormatBytes = Bytes.toBytes("AD_SLOT_FORMAT");
+    private int payingPrice;        private static final byte[] payingPriceBytes = Bytes.toBytes("PAYING_PRICE");
+    private String creativeId;      private static final byte[] creativeIdBytes = Bytes.toBytes("CREATIVE_ID");
+    private int biddingPrice;       private static final byte[] biddingPriceBytes = Bytes.toBytes("BIDDING_PRICE");
+    private String addvertiseId;    private static final byte[] addvertiseIdBytes = Bytes.toBytes("ADVERTISER_ID");
+    private String userTags;        private static final byte[] userTagsBytes = Bytes.toBytes("USER_TAGS");
+    private int streamId;           private static final byte[] streamIdBytes = Bytes.toBytes("STREAM_ID");
 
 
     public static Put convertToPut(LogLine line, String columnFamily){
-        byte[] callFamilyBytes = Bytes.toBytes("data");
+        byte[] callFamilyBytes = Bytes.toBytes(columnFamily);
         String rowKey = line.iPinyouId + "_" + line.timestamp;
         Put put = new Put(Bytes.toBytes(rowKey));
 

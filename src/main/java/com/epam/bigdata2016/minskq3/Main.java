@@ -38,13 +38,13 @@ public class Main {
             KafkaProcessor.getStream(jsc, props.getKafkaConnection());
 
         //save to HBASE
-//        JavaDStream<LogLine> logLineStream = logs.map(keyValue -> LogLine.parseLogLine(keyValue._2()))
-//            .filter(line -> !"null".equals(line.getiPinyouId()));
-//        logLineStream
-//            .foreachRDD(rdd ->
-//                rdd.map(line -> LogLine.convertToPut(line, props.getHbase().getColumnFamily()))
-//                    .foreachPartition(iter -> HbaseProcessor.saveToTable(iter, props.getHbase()))
-//            );
+        JavaDStream<LogLine> logLineStream = logs.map(keyValue -> LogLine.parseLogLine(keyValue._2()))
+            .filter(line -> !"null".equals(line.getiPinyouId()));
+        logLineStream
+            .foreachRDD(rdd ->
+                rdd.map(line -> LogLine.convertToPut(line, props.getHbase().getColumnFamily()))
+                    .foreachPartition(iter -> HbaseProcessor.saveToTable(iter, props.getHbase()))
+            );
 
         //save to ELASTIC SEARCH
         String index = props.getElasticSearch().getIndex();
