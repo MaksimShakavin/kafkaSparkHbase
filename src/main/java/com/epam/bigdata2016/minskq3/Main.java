@@ -9,6 +9,9 @@ import com.epam.bigdata2016.minskq3.model.ESModel;
 import com.epam.bigdata2016.minskq3.model.LogLine;
 import com.epam.bigdata2016.minskq3.utils.DictionaryUtils;
 import org.apache.spark.broadcast.Broadcast;
+import org.apache.spark.mllib.classification.LogisticRegressionModel;
+import org.apache.spark.mllib.linalg.Vectors;
+
 import org.apache.spark.streaming.api.java.JavaDStream;
 import org.apache.spark.streaming.api.java.JavaPairReceiverInputDStream;
 import org.apache.spark.streaming.api.java.JavaStreamingContext;
@@ -30,10 +33,20 @@ public class Main {
         ConfigurableApplicationContext ctx = new SpringApplicationBuilder(Main.class).run(args);
         AppProperties props = ctx.getBean(AppProperties.class);
         JavaStreamingContext jsc = ctx.getBean(JavaStreamingContext.class);
-        Map<String, CityInfo> dict = DictionaryUtils.citiesDictionry(props.getHadoop());
-        Broadcast<Map<String, CityInfo>> brCitiesDict = jsc.sparkContext().broadcast(dict);
+
+        //Prepare dictionaries
+        DictionaryUtils dictionaryUtils = ctx.getBean(DictionaryUtils.class);
+        Map<String, CityInfo> cityDict = dictionaryUtils.citiesDictionry();
+        Map<String, String> tagsDict = dictionaryUtils.tagsDictionary();
+        Broadcast<Map<String, CityInfo>> brCitiesDict = jsc.sparkContext().broadcast(cityDict);
+        Broadcast<Map<String, String>> brTagsDict = jsc.sparkContext().broadcast(tagsDict);
 
 
+        HbaseProcessor hbaseProcessor = ctx.getBean(HbaseProcessor.class);
+        LogisticRegressionModel model1 = LogisticRegressionModel.load(jsc.sparkContext().sc(), props.getSpark().getPathToMlibModel());
+
+
+        //read from kafka
         JavaPairReceiverInputDStream<String, String> logs =
             KafkaProcessor.getStream(jsc, props.getKafkaConnection());
 
@@ -43,7 +56,7 @@ public class Main {
         logLineStream
             .foreachRDD(rdd ->
                 rdd.map(line -> LogLine.convertToPut(line, props.getHbase().getColumnFamily()))
-                    .foreachPartition(iter -> HbaseProcessor.saveToTable(iter, props.getHbase()))
+                    .foreachPartition(hbaseProcessor::saveToTable)
             );
 
         //save to ELASTIC SEARCH
@@ -56,10 +69,21 @@ public class Main {
                 ESModel model = ESModel.parseLine(keyValue._2());
                 CityInfo cityInfo = brCitiesDict.value().getOrDefault(Integer.toString(model.getCity()),unknown);
                 model.setGeoPoint(cityInfo);
+                model.setMlResult(model1.predict(Vectors.dense(model.getOsName().hashCode(),
+                    model.getDevice().hashCode(),
+                    model.getUaFamily().hashCode(),
+                    model.getRegion(),
+                    model.getCity(),
+                    model.getDomain().hashCode(),
+                    model.getAddSlotWidth(),
+                    model.getAddSlotHeight(),
+                    model.getAddSlotVisability(),
+                    model.getAddSlotFormat(),
+                    brTagsDict.value().get(model.getUserTags()).split(",")[0].hashCode())));
                 return model;
             })
             .filter(line -> !"null".equals(line.getiPinyouId()))
-            .mapPartitions(HbaseProcessor::getUserCategory)
+            .mapPartitions(hbaseProcessor::getUserCategory)
             .map(ESModel::toStringifyJson)
             .foreachRDD(jsonRdd -> {
                 JavaEsSpark.saveJsonToEs(jsonRdd, confStr);

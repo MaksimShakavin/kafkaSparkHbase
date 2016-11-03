@@ -71,6 +71,7 @@ public class AppProperties implements Serializable{
     public static class Spark implements Serializable{
         private String appName;
         private int duration;
+        private String pathToMlibModel;
 
         public String getAppName() {
             return appName;
@@ -86,6 +87,14 @@ public class AppProperties implements Serializable{
 
         public void setDuration(int duration) {
             this.duration = duration;
+        }
+
+        public String getPathToMlibModel() {
+            return pathToMlibModel;
+        }
+
+        public void setPathToMlibModel(String pathToMlibModel) {
+            this.pathToMlibModel = pathToMlibModel;
         }
 
         @Override
@@ -158,6 +167,7 @@ public class AppProperties implements Serializable{
     public static class Hadoop implements Serializable{
         private String fileSystem;
         private String cityDictionary;
+        private String tagsDictionary;
 
         public String getFileSystem() {
             return fileSystem;
@@ -173,6 +183,14 @@ public class AppProperties implements Serializable{
 
         public void setCityDictionary(String cityDictionary) {
             this.cityDictionary = cityDictionary;
+        }
+
+        public String getTagsDictionary() {
+            return tagsDictionary;
+        }
+
+        public void setTagsDictionary(String tagsDictionary) {
+            this.tagsDictionary = tagsDictionary;
         }
     }
 

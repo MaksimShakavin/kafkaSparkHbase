@@ -58,6 +58,11 @@
             <artifactId>spark-streaming-kafka-0-8_2.11</artifactId>
             <version>${spark.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-mllib_2.10</artifactId>
+            <version>${spark.version}</version>
+        </dependency>
         <!--build dependencies-->
         <dependency>
             <groupId>org.yaml</groupId>
@@ -85,8 +90,6 @@
             <version>5.2.4.Final</version>
         </dependency>
     </dependencies>
-
-
 
 
     <build>

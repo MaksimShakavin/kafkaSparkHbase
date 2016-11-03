@@ -1,6 +1,7 @@
 spark:
   appName: SparkStreamingLogAggregationApp
   duration: 2000
+  pathToMlibModel: tmp/fp/ml
 kafkaConnection:
   group: test
   topics:
@@ -15,6 +16,7 @@ hbase:
 hadoop:
   fileSystem: hdfs://sandbox.hortonworks.com:8020/
   cityDictionary: hdfs://sandbox.hortonworks.com:8020/tmp/dictionaries/cities.txt
+  tagsDictionary: hdfs://sandbox.hortonworks.com:8020/tmp/dictionaries/tags.txt
 elasticSearch:
   index: logs03
   type: logs

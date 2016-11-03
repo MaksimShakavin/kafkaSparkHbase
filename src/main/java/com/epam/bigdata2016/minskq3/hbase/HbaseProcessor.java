@@ -10,30 +10,37 @@ import org.apache.hadoop.hbase.client.Connection;
 import org.apache.hadoop.hbase.client.ConnectionFactory;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Table;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
+@Component
 public class HbaseProcessor implements Serializable{
+
+    private AppProperties.Hbase hbaseConfig;
+
+    @Autowired
+    public HbaseProcessor(AppProperties properties) {
+        this.hbaseConfig = properties.getHbase();
+    }
 
     private static DateTimeFormatter dateParser = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssX");
     private static DateTimeFormatter dp = DateTimeFormatter.ofPattern("yyyyMMdd");
 
 
-    public static void saveToTable(Iterator<Put> iter, AppProperties.Hbase hbaseConfig){
+    public void saveToTable(Iterator<Put> iter){
         Configuration conf = HBaseConfiguration.create();
         conf.set("hbase.zookeeper.property.clientPort", hbaseConfig.getZookeeperClientPort());
         conf.set("hbase.zookeeper.quorum", hbaseConfig.getZookeeperQuorum());
@@ -51,13 +58,14 @@ public class HbaseProcessor implements Serializable{
         }
     }
 
-    public static Iterator<ESModel> getUserCategory(Iterator<ESModel> iter){
+    public  Iterator<ESModel> getUserCategory(Iterator<ESModel> iter){
+        String fullUrl = "jdbc:" + hbaseConfig.getZookeeperQuorum() + ":" + hbaseConfig.getZookeeperClientPort() + ":" + hbaseConfig.getZookeeperParent();
         List<ESModel> models = new ArrayList<>();
         iter.forEachRemaining(models::add);
         ResultSet rset = null;
         try {
             Class.forName("org.apache.phoenix.jdbc.PhoenixDriver");
-            java.sql.Connection con = DriverManager.getConnection("jdbc:phoenix:sandbox.hortonworks.com:2181:/hbase-unsecure");
+            java.sql.Connection con = DriverManager.getConnection(fullUrl);
             for (ESModel line: models){
                 LocalDate oldDate = LocalDate.parse(line.getTimestamp(), dateParser);
 
@@ -71,7 +79,6 @@ public class HbaseProcessor implements Serializable{
                 while (rset.next()) {
                     LocalDate newDate = LocalDate.parse(rset.getString("LAL"), dp);
                     Integer numberOfClicks = rset.getInt("CLICKS");
-                    System.out.println("newTime " + newDate + ": clicks " + numberOfClicks);
                     long diff = DAYS.between(newDate, oldDate);
                     if (diff == 1) priorDayClicks += numberOfClicks;
                 }
@@ -80,12 +87,12 @@ public class HbaseProcessor implements Serializable{
                 if (priorDayClicks >= 2) result = "CurrentHighRepeat";
                 else if (priorDayClicks == 1) result = "CurrentRepeat";
                 else result = "New";
-
                 line.setCategory(result);
             }
         }catch (Exception ex){
             throw new RuntimeException(ex);
         }
+
         return models.iterator();
     }
 

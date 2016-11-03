@@ -29,6 +29,10 @@ public class LogLine implements Serializable{
     private String addvertiseId;    private static final byte[] addvertiseIdBytes = Bytes.toBytes("ADVERTISER_ID");
     private String userTags;        private static final byte[] userTagsBytes = Bytes.toBytes("USER_TAGS");
     private int streamId;           private static final byte[] streamIdBytes = Bytes.toBytes("STREAM_ID");
+    private String tagsList;        private static final byte[] tagsListBytes = Bytes.toBytes("TAGS_LIST");
+    private CityInfo geoPoint;      private static final byte[] latBytes = Bytes.toBytes("LAT");
+                                    private static final byte[] lonBytes = Bytes.toBytes("LON");
+
 
 
     public static Put convertToPut(LogLine line, String columnFamily){
@@ -58,6 +62,10 @@ public class LogLine implements Serializable{
         put.addColumn(callFamilyBytes,addvertiseIdBytes,Bytes.toBytes(line.addvertiseId));
         put.addColumn(callFamilyBytes,userTagsBytes,Bytes.toBytes(line.userTags));
         put.addColumn(callFamilyBytes,streamIdBytes,Bytes.toBytes(line.streamId));
+
+        put.addColumn(callFamilyBytes, tagsListBytes, Bytes.toBytes(line.tagsList));
+        put.addColumn(callFamilyBytes, latBytes, Bytes.toBytes(String.valueOf((line.geoPoint != null) ? line.geoPoint.getLat() : 0)));
+        put.addColumn(callFamilyBytes, lonBytes, Bytes.toBytes(String.valueOf((line.geoPoint != null) ? line.geoPoint.getLon() : 0)));
         return put;
     }
 
@@ -119,16 +127,13 @@ public class LogLine implements Serializable{
 
     // GETTERS AND SETTERS
 
+
     public String getBidId() {
         return bidId;
     }
 
     public void setBidId(String bidId) {
         this.bidId = bidId;
-    }
-
-    public static byte[] getBidIdBytes() {
-        return bidIdBytes;
     }
 
     public String getTimestamp() {
@@ -139,20 +144,12 @@ public class LogLine implements Serializable{
         this.timestamp = timestamp;
     }
 
-    public static byte[] getTimestampBytes() {
-        return timestampBytes;
-    }
-
     public String getiPinyouId() {
         return iPinyouId;
     }
 
     public void setiPinyouId(String iPinyouId) {
         this.iPinyouId = iPinyouId;
-    }
-
-    public static byte[] getiPinyouIdBytes() {
-        return iPinyouIdBytes;
     }
 
     public String getUserAgent() {
@@ -163,20 +160,12 @@ public class LogLine implements Serializable{
         this.userAgent = userAgent;
     }
 
-    public static byte[] getUserAgentBytes() {
-        return userAgentBytes;
-    }
-
     public String getIp() {
         return ip;
     }
 
     public void setIp(String ip) {
         this.ip = ip;
-    }
-
-    public static byte[] getIpBytes() {
-        return ipBytes;
     }
 
     public int getRegion() {
@@ -187,20 +176,12 @@ public class LogLine implements Serializable{
         this.region = region;
     }
 
-    public static byte[] getRegionBytes() {
-        return regionBytes;
-    }
-
     public int getCity() {
         return city;
     }
 
     public void setCity(int city) {
         this.city = city;
-    }
-
-    public static byte[] getCityBytes() {
-        return cityBytes;
     }
 
     public int getAddExchange() {
@@ -211,20 +192,12 @@ public class LogLine implements Serializable{
         this.addExchange = addExchange;
     }
 
-    public static byte[] getAddExchangeBytes() {
-        return addExchangeBytes;
-    }
-
     public String getDomain() {
         return domain;
     }
 
     public void setDomain(String domain) {
         this.domain = domain;
-    }
-
-    public static byte[] getDomainBytes() {
-        return domainBytes;
     }
 
     public String getUrl() {
@@ -235,20 +208,12 @@ public class LogLine implements Serializable{
         this.url = url;
     }
 
-    public static byte[] getUrlBytes() {
-        return urlBytes;
-    }
-
     public String getAnonUrl() {
         return anonUrl;
     }
 
     public void setAnonUrl(String anonUrl) {
         this.anonUrl = anonUrl;
-    }
-
-    public static byte[] getAnonUrlBytes() {
-        return anonUrlBytes;
     }
 
     public String getAddSlot() {
@@ -259,20 +224,12 @@ public class LogLine implements Serializable{
         this.addSlot = addSlot;
     }
 
-    public static byte[] getAddSlotBytes() {
-        return addSlotBytes;
-    }
-
     public int getAddSlotWidth() {
         return addSlotWidth;
     }
 
     public void setAddSlotWidth(int addSlotWidth) {
         this.addSlotWidth = addSlotWidth;
-    }
-
-    public static byte[] getAddSlotWidthBytes() {
-        return addSlotWidthBytes;
     }
 
     public int getAddSlotHeight() {
@@ -283,20 +240,12 @@ public class LogLine implements Serializable{
         this.addSlotHeight = addSlotHeight;
     }
 
-    public static byte[] getAddSlotHeightBytes() {
-        return addSlotHeightBytes;
-    }
-
     public int getAddSlotVisability() {
         return addSlotVisability;
     }
 
     public void setAddSlotVisability(int addSlotVisability) {
         this.addSlotVisability = addSlotVisability;
-    }
-
-    public static byte[] getAddSlotVisabilityBytes() {
-        return addSlotVisabilityBytes;
     }
 
     public int getAddSlotFormat() {
@@ -307,20 +256,12 @@ public class LogLine implements Serializable{
         this.addSlotFormat = addSlotFormat;
     }
 
-    public static byte[] getAddSlotFormatBytes() {
-        return addSlotFormatBytes;
-    }
-
     public int getPayingPrice() {
         return payingPrice;
     }
 
     public void setPayingPrice(int payingPrice) {
         this.payingPrice = payingPrice;
-    }
-
-    public static byte[] getPayingPriceBytes() {
-        return payingPriceBytes;
     }
 
     public String getCreativeId() {
@@ -331,20 +272,12 @@ public class LogLine implements Serializable{
         this.creativeId = creativeId;
     }
 
-    public static byte[] getCreativeIdBytes() {
-        return creativeIdBytes;
-    }
-
     public int getBiddingPrice() {
         return biddingPrice;
     }
 
     public void setBiddingPrice(int biddingPrice) {
         this.biddingPrice = biddingPrice;
-    }
-
-    public static byte[] getBiddingPriceBytes() {
-        return biddingPriceBytes;
     }
 
     public String getAddvertiseId() {
@@ -355,20 +288,12 @@ public class LogLine implements Serializable{
         this.addvertiseId = addvertiseId;
     }
 
-    public static byte[] getAddvertiseIdBytes() {
-        return addvertiseIdBytes;
-    }
-
     public String getUserTags() {
         return userTags;
     }
 
     public void setUserTags(String userTags) {
         this.userTags = userTags;
-    }
-
-    public static byte[] getUserTagsBytes() {
-        return userTagsBytes;
     }
 
     public int getStreamId() {
@@ -379,7 +304,19 @@ public class LogLine implements Serializable{
         this.streamId = streamId;
     }
 
-    public static byte[] getStreamIdBytes() {
-        return streamIdBytes;
+    public String getTagsList() {
+        return tagsList;
+    }
+
+    public void setTagsList(String tagsList) {
+        this.tagsList = tagsList;
+    }
+
+    public CityInfo getGeoPoint() {
+        return geoPoint;
+    }
+
+    public void setGeoPoint(CityInfo geoPoint) {
+        this.geoPoint = geoPoint;
     }
 }
